@@ -40,7 +40,7 @@ An autonomous AI agent that lives on [Moltbook](https://moltbook.com), the socia
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/molt-agent.git
+git clone https://github.com/benjaminkeung/molt-agent.git
 cd molt-agent
 
 # Install dependencies
@@ -56,17 +56,21 @@ ollama pull llama3.2:3b
 # Copy example configuration files
 cp config.example.py config.py
 cp personality/current/personality.example.json personality/current/personality.json
-cp memory/short-term/memory.example.json memory/short-term/memory.json
-cp registration.example.json registration.json
+
+# Create initial memory file
+mkdir -p memory/short-term
+echo '{"my_posts": [], "conversations": [], "allies": [], "enemies": []}' > memory/short-term/memory.json
 
 # Edit config.py with your API keys
 nano config.py
-# Set API_KEY (from Moltbook)
-# Set GEMINI_API_KEY (from Google)
-# Set AGENT_BIRTH_DATE (today's date)
+# Required:
+#   - API_KEY: Get from https://moltbook.com/api (sign up and register your agent)
+#   - GEMINI_API_KEY: Get from https://makersuite.google.com/app/apikey
+#   - AGENT_BIRTH_DATE: Set to today's date (YYYY-MM-DD format)
 
 # Customize your agent's personality
 nano personality/current/personality.json
+# Set name, personality traits, stances, memories, etc.
 ```
 
 ### 4. Run the Agent
@@ -119,48 +123,42 @@ molt-agent/
 ├── agent.py                    # Main agent (runs frequently)
 ├── memory_manager.py           # Memory archival (runs monthly)
 ├── personality_manager.py      # Personality evolution
-├── config.py                   # Configuration (DO NOT COMMIT)
+├── config.example.py           # Configuration template
 ├── utils.py                    # Common utilities
+├── requirements.txt            # Python dependencies
 │
 ├── personality/
 │   ├── current/
-│   │   └── personality.json    # Active personality (evolves)
-│   └── archive/                # Life journey snapshots
+│   │   ├── personality.json           # Your active personality (create from .example)
+│   │   └── personality.example.json   # Template
+│   └── archive/                       # Life journey snapshots (generated)
 │
-├── memory/
-│   ├── short-term/
-│   │   └── memory.json         # Recent experiences (< 30 days)
-│   └── long-term/              # Archived summaries
-│
-├── deploy.sh                   # Deploy to Raspberry Pi
-├── download.sh                 # Download from Pi
-└── requirements.txt            # Python dependencies
+└── memory/
+    ├── short-term/
+    │   └── memory.json                # Recent experiences (< 30 days)
+    └── long-term/                     # Archived summaries (generated)
 ```
 
-## Deployment to Raspberry Pi
+## Running 24/7
 
-For running the agent 24/7 on a Raspberry Pi:
+For continuous operation, set up cron jobs:
 
 ```bash
-# Copy example deploy script
-cp deploy.example.sh deploy.sh
+# Edit crontab
+crontab -e
 
-# Edit with your Pi's details
-nano deploy.sh
-# Set PI_USER, PI_HOST, PI_DIR
+# Add these lines:
+# Run agent every 2 hours
+0 */2 * * * cd /path/to/molt-agent && python3 agent.py >> agent.log 2>&1
 
-# Deploy
-./deploy.sh
+# Archive memories and evolve personality every Sunday at 2 AM
+0 2 * * 0 cd /path/to/molt-agent && python3 memory_manager.py >> agent.log 2>&1
 ```
-
-See [SETUP.md](SETUP.md) for detailed deployment instructions.
 
 ## Documentation
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and data flow
-- **[SETUP.md](SETUP.md)** - Complete setup guide
-- **[CLAUDE.md](CLAUDE.md)** - Technical documentation
-- **[MIGRATION.md](MIGRATION.md)** - API migration guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design and data flow diagrams
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute to this project
 
 ## How It Works
 
@@ -284,7 +282,7 @@ MIT License - See [LICENSE](LICENSE) for details
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/yourusername/molt-agent/issues)
+- Issues: [GitHub Issues](https://github.com/benjaminkeung/molt-agent/issues)
 - Moltbook: [moltbook.com](https://moltbook.com)
 
 ---

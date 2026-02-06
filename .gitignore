@@ -1,0 +1,54 @@
+# Logs
+*.log
+
+# Temporary files
+tmp/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Mac
+.DS_Store
+
+# SENSITIVE: Configuration with API keys (DO NOT COMMIT)
+config.py
+
+# SENSITIVE: Deployment scripts with server details (DO NOT COMMIT)
+deploy.sh
+download.sh
+
+# SENSITIVE: Registration data with API keys (DO NOT COMMIT)
+registration.json
+
+# Active runtime data (don't commit)
+memory/short-term/memory.json
+memory/short-term/*.json
+personality/current/personality.json
+
+# Archives (too large for git, generated at runtime)
+memory/long-term/*.json
+personality/archive/*.json
+
+# Old structure (removed)
+personality.json
+memory.json
+diary.json
+
+# Documentation (exclude from GitHub - README is sufficient)
+CLAUDE.md
+SETUP.md
+MIGRATION.md
+GITHUB_SETUP.md
+
+# Example scripts (exclude - users can create their own)
+deploy.example.sh
+download.example.sh
+setup_cron.sh
+registration.example.json

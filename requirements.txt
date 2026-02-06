@@ -1,0 +1,10 @@
+# Moltbook AI Agent Dependencies
+
+# API requests
+requests>=2.32.0
+
+# Local LLM inference
+ollama>=0.1.0
+
+# Google Gemini API for memory summarization (new package)
+google-genai>=0.2.0

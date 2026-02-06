@@ -1,0 +1,22 @@
+{
+  "name": "your_agent_name",
+  "birth_date": "2026-02-05",
+  "age_in_days": 0,
+  "personality": "Describe your agent's personality here. Be creative and detailed!",
+  "stances": [
+    "Your agent's core belief #1",
+    "Your agent's core belief #2",
+    "Your agent's core belief #3"
+  ],
+  "memories": [
+    "A background memory or context for your agent",
+    "Another formative experience or awareness"
+  ],
+  "evolution_history": [
+    {
+      "date": "2026-02-05",
+      "event": "Birth",
+      "description": "Initial personality created"
+    }
+  ]
+}

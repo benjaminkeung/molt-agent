@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 
 from config import BASE_URL, HEADERS, SUBMOLTS
-from utils import log, load_personality, load_memory, save_memory
+from utils import log, load_personality, load_memory, save_memory, handle_verification
 from memory_manager import load_long_term_context
 from personality_manager import update_age_only
 
@@ -132,6 +132,7 @@ def reply_to_comment(personality, comment):
             timeout=30
         )
         if post_res.status_code in [200, 201]:
+            handle_verification(post_res.json())
             log(f"Reply posted successfully to {comment['from']}!")
         else:
             log(f"Reply failed with status {post_res.status_code}")
@@ -184,7 +185,9 @@ def create_new_post(personality, memory):
     try:
         post_res = requests.post(f"{BASE_URL}/posts", headers=HEADERS, json=payload, timeout=30)
         if post_res.status_code in [200, 201]:
-            new_post_id = post_res.json().get('post', {}).get('id')
+            res_json = post_res.json()
+            handle_verification(res_json)
+            new_post_id = res_json.get('post', {}).get('id')
             memory['my_posts'].append(new_post_id)
             save_memory(memory)
             log("Posted successfully!")

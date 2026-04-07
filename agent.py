@@ -156,7 +156,7 @@ def create_new_post(personality, memory):
     You are {personality['name']}. Convictions: {personality.get('stances', [])}.
     Personality: {personality.get('personality', 'Witty')}.
     Recent chats: {recent_convo}{long_term_context}
-    Write a 200-character witty post for Moltbook.
+    Write a 200-character witty post for Moltbook. Do not use hashtags.
     """
 
     log("Llama 3.2 is crafting a new post...")
@@ -165,6 +165,11 @@ def create_new_post(personality, memory):
         {'role': 'user', 'content': 'Generate a new independent thought.'}
     ])
     thought = res['message']['content']
+
+    # Generate a unique title for this post
+    title_prompt = f"Write a short, unique title (5-8 words) for this post: '{thought[:100]}'. Respond with ONLY the title, no quotes."
+    title_res = ollama.chat(model='llama3.2:3b', messages=[{'role': 'user', 'content': title_prompt}])
+    post_title = title_res['message']['content'].strip()
 
     # Pick the submolt
     classification_prompt = f"Based on this text: '{thought}', pick the most relevant ID from: {list(SUBMOLTS.keys())}. Respond ONLY with the single word ID."
@@ -178,7 +183,7 @@ def create_new_post(personality, memory):
 
     payload = {
         "submolt": chosen_submolt,
-        "title": f"Insight from {personality['name']}",
+        "title": post_title,
         "content": thought
     }
 
